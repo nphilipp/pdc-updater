@@ -1,19 +1,22 @@
-from os.path import dirname, exists
 import functools
+import logging
 import tarfile
 import unittest
-import logging
+from os.path import dirname, exists
+from unittest.mock import patch
 
-import mock
-import vcr
+from beanbag.bbexcept import BeanBagException
 
 import fedmsg.utils
 
 from nose.tools import raises
 
+import pdc_client.test_helpers
+
 import pdcupdater.utils
 
-import pdc_client.test_helpers
+import vcr
+
 
 log = logging.getLogger(__name__)
 
@@ -22,16 +25,16 @@ base_dir = dirname(dirname(__file__))
 cassette_dir = base_dir + '/vcr-request-data/'
 
 def mock_404():
-    import beanbag.bbexcept
     class Mock404Response(object):
         status_code = 404
     response = Mock404Response()
-    raise beanbag.bbexcept.BeanBagException(response, "404, nope.")
+    raise BeanBagException(response, "404, nope.")
+
 
 def mock_pdc(function):
     # Mock the PDC client
     pdc = pdc_client.test_helpers.MockAPI()
-    pdc_patcher = mock.patch('pdc_client.PDCClient', return_value=pdc)
+    pdc_patcher = patch('pdc_client.PDCClient', return_value=pdc)
     pdc_patcher.start()
 
     @functools.wraps(function)

@@ -1,13 +1,11 @@
 import copy
 import json
 import os
-
-import mock
+from unittest.mock import patch
 
 import pdcupdater.utils
-from pdcupdater.tests.handler_tests import (
-    BaseHandlerTest, mock_pdc
-)
+from pdcupdater.tests.handler_tests import BaseHandlerTest, mock_pdc
+
 
 here = os.path.dirname(__file__)
 
@@ -116,7 +114,7 @@ class TestNewCompose(BaseHandlerTest):
         })
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.old_composes')
+    @patch('pdcupdater.services.old_composes')
     def test_initialize_from_old_composes(self, pdc, old_composes):
         # Mock out kojipkgs results
         old_composes.return_value = [
@@ -146,7 +144,7 @@ class TestNewCompose(BaseHandlerTest):
         })
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.old_composes')
+    @patch('pdcupdater.services.old_composes')
     def test_audit_simple(self, pdc, old_composes):
         # Mock out kojipkgs results
         old_composes.return_value = [
@@ -170,7 +168,7 @@ class TestNewCompose(BaseHandlerTest):
         self.assertSetEqual(absent, set())
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.old_composes')
+    @patch('pdcupdater.services.old_composes')
     def test_audit_missing_one(self, pdc, old_composes):
         # Mock out kojipkgs results
         old_composes.return_value = [

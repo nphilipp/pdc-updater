@@ -1,16 +1,19 @@
 import logging
 import operator
+from functools import reduce
 
 import bs4
-import requests
+
+import dogpile.cache
 
 import pdcupdater.handlers.compose
 import pdcupdater.utils
-from functools import reduce
+
+import requests
+
 
 log = logging.getLogger(__name__)
 
-import dogpile.cache
 cache = dogpile.cache.make_region()
 cache.configure('dogpile.cache.memory', expiration_time=300)
 

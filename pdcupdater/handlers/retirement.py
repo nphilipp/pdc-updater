@@ -1,9 +1,11 @@
 import logging
 from datetime import datetime
-import requests
 
 import pdcupdater.services
 import pdcupdater.utils
+
+import requests
+
 
 log = logging.getLogger(__name__)
 

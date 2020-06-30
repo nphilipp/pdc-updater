@@ -1,9 +1,10 @@
 import logging
-import requests
 
 import pdcupdater.handlers
 import pdcupdater.services
 import pdcupdater.utils
+
+import requests
 
 
 log = logging.getLogger(__name__)

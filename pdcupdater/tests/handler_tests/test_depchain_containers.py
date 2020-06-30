@@ -1,9 +1,7 @@
-import mock
+from unittest.mock import patch
 
 import pdcupdater.utils
-from pdcupdater.tests.handler_tests import (
-    BaseHandlerTest, mock_pdc
-)
+from pdcupdater.tests.handler_tests import BaseHandlerTest, mock_pdc
 
 
 class TestInclusionDepIngestion(BaseHandlerTest):
@@ -11,8 +9,8 @@ class TestInclusionDepIngestion(BaseHandlerTest):
     handler_path = 'pdcupdater.handlers.depchain.containers:ContainerRPMInclusionDepChainHandler'
     config = {}
 
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_container_tags')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_container_tags')
     def test_can_handle_buildsys_tag_message(self, tags, rawhide):
         tags.return_value = ['f24-docker']
         rawhide.return_value = 'f24'
@@ -22,11 +20,11 @@ class TestInclusionDepIngestion(BaseHandlerTest):
         self.assertEqual(result, True)
 
     @mock_pdc
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_container_tags')
-    @mock.patch('pdcupdater.services.koji_rpms_from_archive')
-    @mock.patch('pdcupdater.services.koji_archives_from_build')
-    @mock.patch('pdcupdater.services.koji_get_build')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_container_tags')
+    @patch('pdcupdater.services.koji_rpms_from_archive')
+    @patch('pdcupdater.services.koji_archives_from_build')
+    @patch('pdcupdater.services.koji_get_build')
     def test_handle_new_build(self, pdc, get_build, archives, rpms, tags, rawhide):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'
@@ -72,12 +70,12 @@ class TestInclusionDepIngestion(BaseHandlerTest):
         self.assertEqual(len(pdc.calls['release-component-relationships']), 2)
 
     @mock_pdc
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_tags')
-    @mock.patch('pdcupdater.services.koji_rpms_from_archive')
-    @mock.patch('pdcupdater.services.koji_archives_from_build')
-    @mock.patch('pdcupdater.services.koji_builds_in_tag')
-    @mock.patch('pdcupdater.services.koji_get_build')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.services.koji_rpms_from_archive')
+    @patch('pdcupdater.services.koji_archives_from_build')
+    @patch('pdcupdater.services.koji_builds_in_tag')
+    @patch('pdcupdater.services.koji_get_build')
     def test_audit_empty_koji(self, pdc, get_build, builds, archives, rpms, tags, rawhide):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'
@@ -135,12 +133,12 @@ class TestInclusionDepIngestion(BaseHandlerTest):
 
 
     @mock_pdc
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_tags')
-    @mock.patch('pdcupdater.services.koji_rpms_from_archive')
-    @mock.patch('pdcupdater.services.koji_archives_from_build')
-    @mock.patch('pdcupdater.services.koji_builds_in_tag')
-    @mock.patch('pdcupdater.services.koji_get_build')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.services.koji_rpms_from_archive')
+    @patch('pdcupdater.services.koji_archives_from_build')
+    @patch('pdcupdater.services.koji_builds_in_tag')
+    @patch('pdcupdater.services.koji_get_build')
     def test_audit_mismatch(self, pdc, get_build, builds, archives, rpms, tags, rawhide):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'

@@ -19,15 +19,18 @@ Authors:    Ralph Bean <rbean@redhat.com>
 
 """
 
+import logging
+
 import fedmsg.consumers
+
+import pdc_client
 
 import pdcupdater.handlers
 
-import logging
-log = logging.getLogger(__name__)
-
 from .utils import get_token
-import pdc_client
+
+
+log = logging.getLogger(__name__)
 
 
 class PDCUpdater(fedmsg.consumers.FedmsgConsumer):

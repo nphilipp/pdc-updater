@@ -2,18 +2,18 @@ import logging
 import logging.config
 import sys
 
+from beanbag.bbexcept import BeanBagException
+
 import fedmsg.config
 import fedmsg.encoding
+
+import pdc_client
 
 import pdcupdater.handlers
 import pdcupdater.utils
 
-import beanbag.bbexcept
 
 log = logging.getLogger(__name__)
-
-# https://github.com/product-definition-center/pdc-client/issues/8
-import pdc_client
 
 
 def retry():
@@ -54,7 +54,7 @@ def initialize():
         pdc.set_comment(f"Initialized via {handler!r}")
         try:
             handler.initialize(pdc)
-        except beanbag.bbexcept.BeanBagException as e:
+        except BeanBagException as e:
             log.exception(e.response.text)
             #raise  # TODO - eventually raise here.  While in dev, leave it out
     log.info("Done initializing.")

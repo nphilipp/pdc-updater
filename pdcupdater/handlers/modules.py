@@ -1,18 +1,17 @@
-import os
 import logging
-import errno
-import re
 
 import beanbag
-import requests
-import pdc_client
+
+import gi
+gi.require_version('Modulemd', '1.0')  # noqa: E402
+from gi.repository import Modulemd
+
 import pdcupdater.handlers
 import pdcupdater.services
 import pdcupdater.utils
 
-import gi
-gi.require_version('Modulemd', '1.0') # noqa
-from gi.repository import Modulemd
+import requests
+
 
 log = logging.getLogger(__name__)
 

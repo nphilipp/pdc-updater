@@ -1,9 +1,7 @@
-import mock
+from unittest.mock import patch
 
 import pdcupdater.utils
-from pdcupdater.tests.handler_tests import (
-    BaseHandlerTest, mock_pdc
-)
+from pdcupdater.tests.handler_tests import BaseHandlerTest, mock_pdc
 
 
 class TestNewPerson(BaseHandlerTest):
@@ -37,7 +35,7 @@ class TestNewPerson(BaseHandlerTest):
         })
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.fas_persons')
+    @patch('pdcupdater.services.fas_persons')
     def test_initialize_from_fas(self, pdc, fas):
         # Mock out FAS results
         fas.return_value = [
@@ -63,7 +61,7 @@ class TestNewPerson(BaseHandlerTest):
         })
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.fas_persons')
+    @patch('pdcupdater.services.fas_persons')
     def test_audit_simple(self, pdc, fas):
         # Mock out FAS results
         fas.return_value = [
@@ -86,7 +84,7 @@ class TestNewPerson(BaseHandlerTest):
         self.assertSetEqual(absent, set())
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.fas_persons')
+    @patch('pdcupdater.services.fas_persons')
     def test_audit_with_an_extra(self, pdc, fas):
         # Mock out FAS results
         fas.return_value = [
@@ -108,7 +106,7 @@ class TestNewPerson(BaseHandlerTest):
         self.assertSetEqual(absent, set())
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.fas_persons')
+    @patch('pdcupdater.services.fas_persons')
     def test_audit_missing_one(self, pdc, fas):
         # Mock out FAS results
         fas.return_value = [
@@ -132,7 +130,7 @@ class TestNewPerson(BaseHandlerTest):
         self.assertSetEqual(absent, {'toshio'})
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.fas_persons')
+    @patch('pdcupdater.services.fas_persons')
     def test_audit_flipping_out(self, pdc, fas):
         # Mock out FAS results
         fas.return_value = [

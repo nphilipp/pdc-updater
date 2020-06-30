@@ -1,5 +1,12 @@
-import pdcupdater.services
+import logging
+
+from beanbag.bbexcept import BeanBagException
+
 import pdcupdater.handlers
+import pdcupdater.services
+
+
+log = logging.getLogger(__name__)
 
 
 class NewPersonHandler(pdcupdater.handlers.BaseHandler):
@@ -45,5 +52,5 @@ class NewPersonHandler(pdcupdater.handlers.BaseHandler):
         for person in persons:
             try:
                 pdc['persons']._(person)
-            except beanbag.bbexcept.BeanBagException as e:
+            except BeanBagException as e:
                 log.warn("persons, %r %r", component, e.response)

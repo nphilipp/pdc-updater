@@ -4,10 +4,7 @@ import time
 
 import pdcupdater.handlers
 import pdcupdater.services
-from pdcupdater.utils import (
-    tag2release,
-    interesting_tags,
-)
+from pdcupdater.utils import interesting_tags, tag2release
 
 
 log = logging.getLogger(__name__)

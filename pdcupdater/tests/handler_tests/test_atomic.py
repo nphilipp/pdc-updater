@@ -1,9 +1,7 @@
 import os
 
 import pdcupdater.utils
-from pdcupdater.tests.handler_tests import (
-    BaseHandlerTest, mock_pdc
-)
+from pdcupdater.tests.handler_tests import BaseHandlerTest, mock_pdc
 
 here = os.path.dirname(__file__)
 

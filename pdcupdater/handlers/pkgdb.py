@@ -1,10 +1,11 @@
+import logging
+
+from beanbag.bbexcept import BeanBagException
+
 import pdcupdater.handlers
 import pdcupdater.services
 import pdcupdater.utils
 
-import beanbag.bbexcept
-
-import logging
 
 log = logging.getLogger(__name__)
 
@@ -89,7 +90,11 @@ class NewPackageHandler(pdcupdater.handlers.BaseHandler):
             try:
                 pdc['global-components']._(component)
 <<<<<<< HEAD
+<<<<<<< HEAD
             except beanbag.bbexcept.BeanBagException as e:
+=======
+            except BeanBagException as e:
+>>>>>>> 41038d3... flake8: Imports
                 log.warn("global-component, %r %r" % (component, e.response))
 =======
             except BeanBagException as e:
@@ -179,5 +184,5 @@ class NewPackageBranchHandler(pdcupdater.handlers.BaseHandler):
         for component in components:
             try:
                 pdc['release-components']._(component)
-            except beanbag.bbexcept.BeanBagException as e:
+            except BeanBagException as e:
                 log.warn("release-component, %r %r", component, e.response)

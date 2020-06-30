@@ -1,23 +1,24 @@
-import copy
 import contextlib
+import copy
 import functools
-import hashlib
 import itertools
+import logging
+import os
 import socket
 import time
-import os
-import shutil
-import tempfile
 
-import requests
-import requests_kerberos
-import six
-import beanbag.bbexcept
-
-import logging
-log = logging.getLogger(__name__)
+from beanbag.bbexcept import BeanBagException
 
 import dogpile.cache
+
+import requests
+
+import requests_kerberos
+
+import six
+
+
+log = logging.getLogger(__name__)
 
 cache = dogpile.cache.make_region()
 cache.configure('dogpile.cache.memory', expiration_time=300)
@@ -59,7 +60,7 @@ def ensure_component_group_exists(pdc, component_group):
     try:
         # Try to create it
         pdc['component-groups']._(component_group)
-    except beanbag.bbexcept.BeanBagException as e:
+    except BeanBagException as e:
         if e.response.status_code != 400:
             raise
         body = e.response.json()
@@ -76,7 +77,7 @@ def ensure_component_group_type_exists(pdc, component_group_type):
     try:
         # Try to create it
         pdc['component-group-types']._({'name': component_group_type})
-    except beanbag.bbexcept.BeanBagException as e:
+    except BeanBagException as e:
         if e.response.status_code != 400:
             raise
         body = e.response.json()
@@ -90,7 +91,7 @@ def ensure_release_exists(pdc, release_id, release):
     """ Create a release in PDC if it doesn't already exist. """
     try:
         pdc['releases'][release_id]._()
-    except beanbag.bbexcept.BeanBagException as e:
+    except BeanBagException as e:
         if e.response.status_code != 404:
             raise
         log.warn("No release %r exists.  Creating.", release_id)
@@ -123,7 +124,7 @@ def ensure_release_component_exists(pdc, release_id, name, type='rpm'):
         }
         # If this works, then we return the primary key and other data.
         return pdc['release-components']._(data)
-    except beanbag.bbexcept.BeanBagException as e:
+    except BeanBagException as e:
         # If it failed, see what kind of failure it was.
         if e.response.status_code != 400:
             raise
@@ -178,7 +179,7 @@ def ensure_release_component_relationship_exists(pdc, parent, child, type):
             'type': type,
         }
         pdc['release-component-relationships']._(data)
-    except beanbag.bbexcept.BeanBagException as e:
+    except BeanBagException as e:
         if e.response.status_code != 400:
             raise
         body = e.response.json()
@@ -449,7 +450,7 @@ def compose_exists(pdc, compose_id):
     try:
         pdc['composes'][compose_id]._()
         return True
-    except beanbag.bbexcept.BeanBagException as e:
+    except BeanBagException as e:
         if e.response.status_code != 404:
             raise
         return False
@@ -484,7 +485,7 @@ def handle_message(pdc, handlers, msg, verbose=False):
         with annotated(pdc, msg['msg_id']) as client:
             try:
                 handler.handle(client, msg)
-            except beanbag.bbexcept.BeanBagException as e:
+            except BeanBagException as e:
                 log.error(e.response.text)
                 raise
 

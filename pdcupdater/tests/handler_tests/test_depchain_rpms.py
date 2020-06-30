@@ -1,13 +1,10 @@
 import json
 import os
+from unittest.mock import patch
 
-import mock
-
-import pdcupdater.utils
 import pdcupdater.handlers.depchain.rpms
-from pdcupdater.tests.handler_tests import (
-    BaseHandlerTest, mock_pdc
-)
+import pdcupdater.utils
+from pdcupdater.tests.handler_tests import BaseHandlerTest, mock_pdc
 
 
 def load_example_message(filename):
@@ -33,8 +30,8 @@ class TestBuildtimeDepIngestion(BaseHandlerTest):
     handler_path = 'pdcupdater.handlers.depchain.rpms:NewRPMBuildTimeDepChainHandler'
     config = {}
 
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_tags')
     def test_can_handle_buildsys_tag_message(self, tags, rawhide):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'
@@ -57,9 +54,9 @@ class TestBuildtimeDepIngestion(BaseHandlerTest):
         )
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.koji_list_buildroot_for')
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.services.koji_list_buildroot_for')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_tags')
     def test_handle_new_build(self, pdc, tags, rawhide, buildroot):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'
@@ -83,11 +80,11 @@ class TestBuildtimeDepIngestion(BaseHandlerTest):
         self.assertEqual(len(pdc.calls['release-component-relationships']), 66)
 
     @mock_pdc
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_tags')
-    @mock.patch('pdcupdater.services.koji_list_buildroot_for')
-    @mock.patch('pdcupdater.services.koji_rpms_from_build')
-    @mock.patch('pdcupdater.services.koji_rpms_in_tag')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.services.koji_list_buildroot_for')
+    @patch('pdcupdater.services.koji_rpms_from_build')
+    @patch('pdcupdater.services.koji_rpms_in_tag')
     def test_audit_empty_koji(self, pdc, builds, rpms, buildroot, tags, rawhide):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'
@@ -128,11 +125,11 @@ class TestBuildtimeDepIngestion(BaseHandlerTest):
         self.assertSetEqual(absent, set())
 
     @mock_pdc
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_tags')
-    @mock.patch('pdcupdater.services.koji_list_buildroot_for')
-    @mock.patch('pdcupdater.services.koji_rpms_from_build')
-    @mock.patch('pdcupdater.services.koji_rpms_in_tag')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.services.koji_list_buildroot_for')
+    @patch('pdcupdater.services.koji_rpms_from_build')
+    @patch('pdcupdater.services.koji_rpms_in_tag')
     def test_audit_mismatch(self, pdc, builds, rpms, buildroot, tags, rawhide):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'
@@ -185,11 +182,11 @@ class TestRuntimeDepIngestionFedora(BaseHandlerTest):
     config = {}
 
     @mock_pdc
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_tags')
-    @mock.patch('pdcupdater.services.koji_yield_rpm_requires')
-    @mock.patch('pdcupdater.services.koji_rpms_from_build')
-    @mock.patch('pdcupdater.services.koji_rpms_in_tag')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.services.koji_yield_rpm_requires')
+    @patch('pdcupdater.services.koji_rpms_from_build')
+    @patch('pdcupdater.services.koji_rpms_in_tag')
     def test_audit_mismatch(self, pdc, builds, rpms, requires, tags, rawhide):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'
@@ -224,11 +221,11 @@ class TestRuntimeDepIngestionFedora(BaseHandlerTest):
         self.assertSetEqual(absent, {'guake/fedora-24 RPMRequires runtimelib1/fedora-24'})
 
     @mock_pdc
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_tags')
-    @mock.patch('pdcupdater.services.koji_yield_rpm_requires')
-    @mock.patch('pdcupdater.services.koji_rpms_from_build')
-    @mock.patch('pdcupdater.services.koji_rpms_in_tag')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.services.koji_yield_rpm_requires')
+    @patch('pdcupdater.services.koji_rpms_from_build')
+    @patch('pdcupdater.services.koji_rpms_in_tag')
     def test_audit_simple_match(self, pdc, builds, rpms, requires, tags, rawhide):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'
@@ -263,11 +260,11 @@ class TestRuntimeDepIngestionFedora(BaseHandlerTest):
         self.assertSetEqual(absent, set())
 
     @mock_pdc
-    @mock.patch('pdcupdater.utils.rawhide_tag')
-    @mock.patch('pdcupdater.utils.interesting_tags')
-    @mock.patch('pdcupdater.services.koji_yield_rpm_requires')
-    @mock.patch('pdcupdater.services.koji_rpms_from_build')
-    @mock.patch('pdcupdater.services.koji_rpms_in_tag')
+    @patch('pdcupdater.utils.rawhide_tag')
+    @patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.services.koji_yield_rpm_requires')
+    @patch('pdcupdater.services.koji_rpms_from_build')
+    @patch('pdcupdater.services.koji_rpms_in_tag')
     def test_initialize(self, pdc, builds, rpms, requires, tags, rawhide):
         tags.return_value = ['f24']
         rawhide.return_value = 'f24'
@@ -347,9 +344,9 @@ class TestRuntimeDepIngestionRedHat(BaseHandlerTest):
             )
 
     @mock_pdc
-    @mock.patch('pdcupdater.services.koji_list_buildroot_for')
-    @mock.patch('pdcupdater.utils.tag2release')
-    @mock.patch('pdcupdater.utils.interesting_tags')
+    @patch('pdcupdater.services.koji_list_buildroot_for')
+    @patch('pdcupdater.utils.tag2release')
+    @patch('pdcupdater.utils.interesting_tags')
     def test_handle_new_brew_build(self, pdc, tags, tag2release, buildroot):
         tags.return_value = ['rhel-9000-candidate']
         tag2release.return_value = 'rhel-9000', {

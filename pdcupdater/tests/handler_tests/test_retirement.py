@@ -1,9 +1,8 @@
-import mock
+from unittest.mock import Mock, patch
 
-from pdcupdater.tests.handler_tests import BaseHandlerTest, mock_pdc
-import pdcupdater.services
 import pdcupdater.handlers.retirement
-from pdcupdater.handlers.retirement import RetireComponentHandler
+import pdcupdater.services
+from pdcupdater.tests.handler_tests import BaseHandlerTest, mock_pdc
 
 
 class TestRetiredComponents(BaseHandlerTest):
@@ -164,12 +163,12 @@ class TestRetiredComponents(BaseHandlerTest):
             }
         ])
 
-        with mock.patch('requests.Session') as mock_requests_session:
-            mock_rv_found = mock.Mock()
+        with patch('requests.Session') as mock_requests_session:
+            mock_rv_found = Mock()
             mock_rv_found.status_code = 200
-            mock_rv_not_found = mock.Mock()
+            mock_rv_not_found = Mock()
             mock_rv_not_found.status_code = 404
-            mock_session_rv = mock.Mock()
+            mock_session_rv = Mock()
             mock_session_rv.head.side_effect = [mock_rv_found, mock_rv_not_found]
             mock_requests_session.return_value = mock_session_rv
             present, absent = self.handler.audit(pdc)
@@ -223,10 +222,10 @@ class TestRetiredComponents(BaseHandlerTest):
             }
         ])
 
-        with mock.patch('requests.Session') as mock_requests_session:
-            mock_rv_not_found = mock.Mock()
+        with patch('requests.Session') as mock_requests_session:
+            mock_rv_not_found = Mock()
             mock_rv_not_found.status_code = 404
-            mock_session_rv = mock.Mock()
+            mock_session_rv = Mock()
             mock_session_rv.head.return_value = mock_rv_not_found
             mock_requests_session.return_value = mock_session_rv
             present, absent = self.handler.audit(pdc)
@@ -279,10 +278,10 @@ class TestRetiredComponents(BaseHandlerTest):
             }
         ])
 
-        with mock.patch('requests.Session') as mock_requests_session:
-            mock_rv_not_found = mock.Mock()
+        with patch('requests.Session') as mock_requests_session:
+            mock_rv_not_found = Mock()
             mock_rv_not_found.status_code = 200
-            mock_session_rv = mock.Mock()
+            mock_session_rv = Mock()
             mock_session_rv.head.return_value = mock_rv_not_found
             mock_requests_session.return_value = mock_session_rv
             present, absent = self.handler.audit(pdc)
@@ -335,8 +334,8 @@ class TestRetiredComponents(BaseHandlerTest):
             }
         ])
 
-        with mock.patch.object(pdcupdater.handlers.retirement, '_retire_branch') as mock_retire_branch, \
-                mock.patch.object(pdcupdater.handlers.retirement, '_is_retired_in_dist_git') as mock_is_retired_in_dist_git:
+        with patch.object(pdcupdater.handlers.retirement, '_retire_branch') as mock_retire_branch, \
+                patch.object(pdcupdater.handlers.retirement, '_is_retired_in_dist_git') as mock_is_retired_in_dist_git:
             mock_is_retired_in_dist_git.side_effect = [True, False]
             self.handler.initialize(pdc)
         self.assertEqual(mock_retire_branch.call_count, 1)
