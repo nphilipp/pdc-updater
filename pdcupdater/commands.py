@@ -1,6 +1,7 @@
 import logging
 import logging.config
 import sys
+from itertools import islice
 
 from beanbag.bbexcept import BeanBagException
 
@@ -126,8 +127,7 @@ def _print_audit_report(results, verbose):
                     if isinstance(present, dict):
                         print(f"  {present[value]}")
             else:
-                present = list(present)
-                for value in present[:limit]:
+                for value in islice(present, limit):
                     print(f"- {value}")
                     if isinstance(present, dict):
                         print(f"  {present[value]}")
@@ -145,8 +145,7 @@ def _print_audit_report(results, verbose):
                     if isinstance(absent, dict):
                         print(f"  {absent[value]}")
             else:
-                absent = list(absent)
-                for value in absent[:limit]:
+                for value in islice(absent, limit):
                     print(f"- {value}")
                     if isinstance(absent, dict):
                         print(f"  {absent[value]}")
