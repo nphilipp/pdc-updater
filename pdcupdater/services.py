@@ -231,14 +231,14 @@ def pkgdb_packages(base_url, extra=False):
     result = pkgdb.get_packages(page='all')
     packages = result['packages']
     if extra:
-        for i in range(len(packages)):
-            package = pkgdb.get_package(packages[i]['name'])
-            collections = [p['collection'] for p in package['packages']]
-            packages[i]['collections'] = collections
-            yield packages[i]
+        for package in packages:
+            pkgdb_package = pkgdb.get_package(package['name'])
+            collections = [p['collection'] for p in pkgdb_package['packages']]
+            package['collections'] = collections
+            yield package
     else:
-        for i in range(len(packages)):
-            yield packages[i]
+        for package in packages:
+            yield package
 
 
 
